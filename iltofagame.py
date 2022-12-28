@@ -37,20 +37,39 @@ score = 0
 
 scrolly=0+background.get_height()
 scrolly2=0
+inputs=""
 
 
 # =================================================================================== CONTROLLI
+def on_mouse_down(pos, button):
+    global inputs
+    if pos[0] <= (WIDTH/2):
+        inputs+="left"
+    if pos[0] > (WIDTH/2):
+        inputs+="down"
+    if pos[1] < (HEIGHT/5):
+        inputs+="escape"
+	
+
 def getkeys():
-    global status, playerx, playery, playerdir, speed, steer, lives, level, score
+    global status, playerx, playery, playerdir, speed, steer, lives, level, score, inputs
 
     if keyboard.left:
+        inputs+="left"
+    if keyboard.down:
+        inputs+="down"
+    if keyboard.escape:
+        inputs+="escape"
+
+
+    if "left" in inputs:
         playerdir = False
     else:
         playerdir = True
 
 #    if keyboard.up and speed < 10: accelerare
 
-    if keyboard.down and speed > 2:
+    if "down" in inputs and speed > 2:
         speed-=1
     elif speed <15:
         speed+=1
@@ -62,24 +81,22 @@ def getkeys():
         if playerdir == False and playerx > 20 :
             playerx -= steer
 
-    if keyboard.escape:
+    if inputs == "escape":
         if status == 0:
             exit()
         if status == 1:
             status = 0
-            setup()
+#            setup()
 
+    inputs = ""
 
-def on_mouse_down(pos, button):
-    print("Mouse button", button, "clicked at", pos[0])
-	
 
 def draw():
     pass
 
 
-def playgame():
-    global status, playerx, playery, playerdir, speed, steer, lives, level, score
+def scrolling():
+    global status, playerx, playery, playerdir, speed, steer, lives, level, score, inputs
     global scrolly, scrolly2
 
     # Calcolo scrolling
@@ -100,15 +117,9 @@ def playgame():
 
 # =================================================================================== Aggiorna Schermo
 def update():
-    global status, playerx, playery, playerdir, speed, steer, lives, level, score
+    global status, playerx, playery, playerdir, speed, steer, lives, level, score, inputs
     global scrolly,scrolly2
 
     pygame.display.update()
-    playgame()
-#    print("---")
-
+    scrolling()
     getkeys()
-
-# =================================================================================== Main
-
-# setup()

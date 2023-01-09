@@ -1,133 +1,64 @@
 
-import pgzero
+
 import pygame
 import random
-import math
 pygame.init()
 
+SCHERMO = pygame.display.set_mode((288, 512))
 
-WIDTH = 300
-HEIGHT = 500
-SCHERMO = pygame.display.set_mode((300, 500))
 
-status=1
+
+# =================================================================================== ASSET
+
+
+background = pygame.image.load("./images/starsbg.png")
+player = pygame.image.load("./images/alien.png")
+
 
 # =================================================================================== SETUP
 
-background = pygame.image.load("./images/road.png")
-background2 = pygame.image.load("./images/road.png")
-player = pygame.image.load("./images/player.png")
-rock = pygame.image.load("./images/rock3.png")
-oil = pygame.image.load("./images/oil.png")
-barrel = pygame.image.load("./images/barrel_red.png")
-barrels=[]
+def setup():
+    global status, playerx, playery, playerdir, speed, steer, lives, level, score
+    # status 0 intro 1 menu 2 ingioco
+    status=0
 
-arrwhite = pygame.image.load("./images/arrow_white.png")
-arrswhite = []
-arryellow = pygame.image.load("./images/arrow_yellow.png")
-arrsyellow = []
+    # player
+    playerx = 200
+    playery = 200
+    playerdir = True
+    speed = 30
+    steer = 4
 
-# def setup():
-# status 0 intro 1 menu 2 ingioco
-status=1
+    lives = 0
+    level = 1
+    score = 0
 
-# player
-playerx = 100
-playery = 400
-playerdir = True
-speed = 2
-steer = 4
-
-lives = 0
-level = 1
-score = 0
-
-scrolly=0+background.get_height()
-scrolly2=0
-inputs=""
-
-
-# =================================================================================== CONTROLLI
-def on_mouse_down(pos, button):
-    global inputs
-    if pos[0] <= (WIDTH/2):
-        inputs+="left"
-    if pos[0] > (WIDTH/2):
-        inputs+="down"
-    if pos[1] < (HEIGHT/5):
-        inputs+="escape"
-	
-
-def getkeys():
-    global status, playerx, playery, playerdir, speed, steer, lives, level, score, inputs
-
-    if keyboard.left:
-        inputs+="left"
-    if keyboard.down:
-        inputs+="down"
-    if keyboard.escape:
-        inputs+="escape"
-
-    if keyboard.up:
-        barrells
-
-    if "left" in inputs:
-        playerdir = False
-    else:
-        playerdir = True
-
-#    if keyboard.up and speed < 10: accelerare
-
-    if "down" in inputs and speed > 2:
-        speed-=1
-    elif speed <15:
-        speed+=1
-
-
-    if status == 1:
-        if playerdir == True and playerx < 200 :
-            playerx += steer
-        if playerdir == False and playerx > 20 :
-            playerx -= steer
-
-    if inputs == "escape":
-        if status == 0:
-            exit()
-        if status == 1:
-            status = 0
-#            setup()
-
-    # Resetta input
-    inputs = ""
 
 
 def draw():
+
     pass
 
+def update():
+    global status, playerx, playery, playerdir, speed, steer, lives, level, score
 
-def scrolling():
-    global status, playerx, playery, playerdir, speed, steer, lives, level, score, inputs
-    global scrolly, scrolly2
+# =================================================================================== Aggiorna Schermo
 
-    # Calcolo scrolling
-    scrolly+=speed
-    if scrolly> HEIGHT:
-        scrolly=0- background.get_height() - 5
-    scrolly2+=speed
-    if scrolly2> HEIGHT:
-        scrolly2=0- background2.get_height() - 5
-
-    # Aggliornamento strada
-    SCHERMO.blit(background, (0, scrolly))
-    SCHERMO.blit(background2, (0, scrolly2))
+    SCHERMO.blit(background, (0, 0))
     SCHERMO.blit(player, (playerx, playery))
 
 
-# =================================================================================== Aggiorna Schermo
-def update():
-    global status, playerx, playery, playerdir, speed, steer, lives, level, score, inputs
-    global scrolly,scrolly2
 
-    pygame.display.update()
-    scrolling()
-    getkeys()
+# =================================================================================== CONTROLLI
+
+    if keyboard.left:
+        playerdir= False
+    else:
+        playerdir = True
+
+    if playerdir == True:
+        playerx += 4
+    else:
+        playerx -= 4
+
+setup()

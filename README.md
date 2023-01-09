@@ -6,5 +6,5 @@ But be careful when collecting fuel so you don't run out of fuel!
 
 **Just two fingers: "left" to move the car and "down" to brake.**
 
-Tap Race by KiRoDe Software
+Tap Ride by KiRoDe Software
 

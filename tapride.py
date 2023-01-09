@@ -5,13 +5,16 @@ import random
 import math
 pygame.init()
 
+# =================================================================================== TAP RIDE 1.0
+
+
+
+
+# =================================================================================== SETUP
 
 WIDTH = 300
 HEIGHT = 500
 SCHERMO = pygame.display.set_mode((300, 500))
-
-
-# =================================================================================== SETUP
 
 # status 0 intro 1 menu 2 ingioco
 status=1
@@ -21,31 +24,34 @@ background = pygame.image.load("./images/road.png")
 background2 = pygame.image.load("./images/road2.png")
 
 
-
-
-
+# Obstacle to overcome
 oil = Actor( "oil",  (0,0) )
 oils=[]
 
+# Obstacle to overcome
 rock= Actor("rock", (0,0) )
 rocks=[]
 
 
+# Fuel to get
 barrel= Actor("barrel", (0,0) )
 barrels=[]
 
+
+# Bonus to get
 arrwhite = Actor("arrow_white", (0,0))
 arrswhite = []
 
+# Bonus to get
 arrwhite = Actor("arrow_yellow", (0,0))
 arrsyellow = []
 
+# Game Logo
 tapride = Actor("tapride", (WIDTH/2, HEIGHT/2) )
 
 
 
 # player
-
 player = Actor("player", (60, HEIGHT-80) )
 
 scrolly=0+background.get_height()
@@ -55,7 +61,7 @@ inputs=""
 framecount=0
 
 def setup():
-#reset dei lavori di gioco
+# reset game settings
     global status, playerdir, speed, topspeed, steer, lives, level, score, inputs, scrolly, scrolly2, framecount, fuel, topscore
 
     playerdir = True
@@ -70,12 +76,13 @@ def setup():
 
 setup()
 
-# Musica! job
+# Music!
 sounds.arcade.play()
 
 # =================================================================================== CONTROLLI
 
 def getkeys():
+# Detect keys and controls    
     global status, playerdir, speed, topspeed, steer, lives, level, score, inputs, scrolly, scrolly2, framecount, fuel, topscore
 
     if keyboard.left:
@@ -116,11 +123,6 @@ def getkeys():
         if playerdir == False and player.x > 50 :
             player.x -= steer
 
-    if "escape" in inputs:
-        inputs = ""
-        barrel= Actor("barrel", (0,0) )
-        barrels.append(barrel)
-
 
         if status == 0:
             pass
@@ -145,14 +147,13 @@ def draw():
         player.draw()
 
 
-# Gestione COLLISIONI
+# Collisions
     for barrel in barrels:
         if barrel.y < HEIGHT:
             barrel.draw()
             if barrel.colliderect(player) and status == 2:
                 barrels.remove(barrel)
                 sounds.powerup.play()
-#                print ("barrel collide")
                 fuel = 100
         else:
             barrels.remove(barrel)
@@ -164,7 +165,6 @@ def draw():
             if rock.colliderect(player) and status == 2:
                 sounds.rock.play()
                 rocks.remove(rock)
-#                print ("rock collide")
                 lives-=1
                 speed=0
                 topspeed=topspeed/2
@@ -172,7 +172,8 @@ def draw():
             rocks.remove(rock)
 
 
-# Aggiorna UI
+# UI on screen
+Aggiorna UI
     if status == 2:
         if score < topscore:
             screen.draw.text("Lives "+str(lives)+" Score "+str(score)+" Fuel " +str(fuel)+"%", (10,10))
@@ -185,7 +186,7 @@ def draw():
         screen.draw.text("Press UP to Play!", (80,HEIGHT-50))
 
 
-# Se status 1 metti il titolo
+# Main title
     if status == 1:
         tapride.draw()
 
@@ -196,7 +197,7 @@ def draw():
 def scrolling():
     global status, playerdir, speed, topspeed, steer, lives, level, score, inputs, scrolly, scrolly2, framecount, fuel, topscore
 
-    # Calcolo scrolling
+# Scrolling background
     scrolly+=speed
     if scrolly> HEIGHT:
         scrolly=0- background.get_height() - 5
@@ -204,7 +205,7 @@ def scrolling():
     if scrolly2> HEIGHT:
         scrolly2=0- background2.get_height() - 5
 
-# Scrolling degli oggetti
+# Scrolling stuff
     for barrel in barrels:
         barrel.y+=speed
     for rock in rocks:
@@ -222,15 +223,15 @@ def update():
     scrolling()
     getkeys()
 
-# se finisce il carburante game over
+# No fuel = Game oveer
     if fuel < 1:
         status=1
 
-# se non hai lives game over
+# No lives = Game over
     if lives < 1:
         status=1
 
-# se sei al menu e premi up ricominci il gioco
+# Up to start
     if status == 1:
         # print("Menu di gioco")
         if "up" in inputs:
@@ -238,13 +239,14 @@ def update():
             status=2
 
     framecount+=1
-# secondo
+
+# Game random events    
     if framecount > 59+ (topspeed/3) and status == 2:
         topspeed+=1
         framecount=0
         junk=0
 
-    # genera item casuale
+# generate random
         if status == 2:
             junk = random.randint(0,10)
 
@@ -255,10 +257,8 @@ def update():
             rock = Actor("rock", pos=(random.randint(50, 250), -40))
             rocks.append(rock)
 
-# aggiorna i valori in base allo status
+# When you braks lose score
         if status == 2:
-            if "up" in inputs:
-                lives-=1
             if "down" in inputs:
                 score-=1
             else:
@@ -268,5 +268,5 @@ def update():
             pass
 
 
-# Resetta input
+# Reset input
     inputs = ""

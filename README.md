@@ -7,4 +7,4 @@ But be careful when collecting bonus so you don't run out of fuel!
 **Just two fingers: "left" to move the car and "down" to brake.**
 
 Tap Ride by KiRoDe Software
-
+Made with Code with Mu
